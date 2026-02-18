@@ -1,0 +1,42 @@
+1. Problem:
+   - Rearrange the letters of a string so that no two identical letters are adjacent.
+   - If impossible, output -1.
+   - Among all valid rearrangements, output the lexicographically smallest one.
+
+2. Approach:
+   - Sort the string alphabetically first. This ensures we always try the smallest letter first.
+   - Count the frequency of each letter.
+   - Build the result string one character at a time:
+     a. At each position, try letters from 'A' to 'Z' in order.
+     b. Skip the letter if it was the previous character (to avoid adjacent duplicates).
+     c. Temporarily reduce its frequency and check if placing it is "safe":
+        - Safe means that the remaining letters can still be arranged without violating the rule.
+        - Check using: the max remaining frequency <= ceil(remaining total / 2) and current letter <= remaining total / 2.
+     d. If safe, place the letter and update the previous character.
+     e. If no letter can be placed safely, the string is impossible (-1).
+
+3. Helper Function:
+   - `canPlace(freq, idx)` checks if placing the letter at index `idx` now is safe.
+   - It calculates total remaining letters and the max frequency among remaining letters.
+
+4. Result:
+   - Greedy + sorted order ensures:
+     - Valid string (no adjacent duplicates)
+     - Lexicographically smallest among all valid strings
+   - Complexity: O(N) since 26 letters are constant, N = string length.
+
+5. Example:
+   Input:  "AAABB"
+   Sorted: "AABBB"
+   Step by step placement:
+     - Place 'A' -> result = "A"
+     - Place 'B' -> result = "AB"
+     - Place 'A' -> result = "ABA"
+     - Place 'B' -> result = "ABAB"
+     - Place 'A' -> result = "ABABA"
+   Output: "ABABA"
+
+6. Notes:
+   - If the most frequent letter occurs more than ceil(N/2) times, it’s impossible.
+   - Sorting first + greedy placement ensures the lexicographically smallest valid string.
+

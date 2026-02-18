@@ -1,0 +1,95 @@
+Chessboard and Queens 
+
+1.  What the problem is asking
+
+-   We are given an 8x8 chessboard.
+-   Some cells are blocked (*), some are free (.).
+-   We must place 8 queens.
+-   No two queens can attack each other.
+-   Queens attack in same row, same column, and both diagonals.
+-   We must count how many valid ways exist.
+
+2.  Key observation
+
+-   There are 8 rows and we must place 8 queens.
+-   So we must place exactly one queen in each row.
+-   That simplifies the problem a lot.
+-   Now we only decide: in each row, which column do we choose?
+
+3.  Idea of the solution
+
+-   We solve it using DFS (depth-first search) with backtracking.
+-   We go row by row.
+-   At each row, we try all safe columns.
+-   If a column is safe, we place a queen and move to the next row.
+-   If we reach row 8, it means we placed all 8 queens safely. That is
+    one valid solution.
+
+4.  How we track used positions
+
+Instead of using arrays, we use bitmasks (integers).
+
+We maintain three integers:
+
+-   cols -> which columns are already used
+-   d1 -> main diagonals that are attacked
+-   d2 -> anti-diagonals that are attacked
+
+Each bit represents one column.
+
+If a bit is 1, that position is blocked. If a bit is 0, that position is
+free.
+
+5.  Precomputing free cells
+
+-   For each row, we build a mask called rowMask.
+-   If a cell is free (.), we set that column’s bit to 1.
+-   If a cell is blocked (*), we leave that bit as 0.
+-   This avoids checking the board repeatedly during DFS.
+
+6.  Finding valid positions in a row
+
+At a given row, we compute:
+
+available = rowMask[row] & ~(cols | d1 | d2)
+
+This means: - It must be a free cell. - It must not be in a used
+column. - It must not be attacked by diagonals.
+
+The result is a bitmask of all safe columns in that row.
+
+7.  Choosing positions efficiently
+-   Instead of checking all 8 columns one by one,
+-   We extract the lowest set bit using:
+    pos = available & -available
+-   This gives us one valid column instantly.
+-   Then we remove that bit from available and continue.
+-   This makes the solution faster and cleaner.
+
+8.  Updating diagonals
+When we place a queen:
+-   We mark the column as used: cols | pos
+-   Main diagonal shifts left: (d1 | pos) << 1
+-   Anti-diagonal shifts right: (d2 | pos) >> 1
+Shifting works because diagonals move one column left or right when we
+go to the next row.
+
+9.  Base case
+-   If row == 8,
+-   It means we successfully placed all 8 queens.
+-   We increase the answer count.
+
+10. Time complexity
+-   In worst case, it is similar to 8! (about 40,320).
+-   However, pruning makes it much faster in practice.
+-   Since N = 8 is fixed, it runs in constant time for this problem.
+
+General case for N queens: - Time complexity is approximately O(N!).
+
+11. Space complexity
+
+-   Recursion depth is at most 8.
+-   We only store a few integers (bitmasks).
+-   So space complexity is O(N) due to recursion stack.
+-   For N = 8, space usage is very small.
+
