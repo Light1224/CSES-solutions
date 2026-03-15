@@ -135,30 +135,28 @@ template <typename T> void print(const vector<T> &a) {
 // =================== SOLVE FUNCTION ===================
 
 inline void solve() {
-  int n, m;
-  ll k;
-  cin >> n >> m >> k;
-  vll a(n), b(m);
-  read(a);
-  read(b);
+  int N;
+  ll X;
+  cin >> N >> X;
+  vll p(N);
+  read(p);
+  sort(all(p));
 
-  sort(all(a));
-  sort(all(b));
-
+  int i = 0, j = N - 1;
   int ans = 0;
-  int i = 0, j = 0;
 
-  while (i < n && j < m) {
-    if (b[j] < a[i] - k) {
-      j++;
-    } else if (b[j] > a[i] + k) {
+  while (i < j) {
+    if (p[i] + p[j] <= X) {
       i++;
+      j--;
     } else {
-      ans++;
-      i++;
-      j++;
+      j--;
     }
+    ++ans;
   }
+
+  if (i == j)
+    ans++;
 
   cout << ans << endl;
 }

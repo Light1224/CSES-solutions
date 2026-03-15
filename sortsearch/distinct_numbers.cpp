@@ -135,28 +135,17 @@ template <typename T> void print(const vector<T> &a) {
 // =================== SOLVE FUNCTION ===================
 
 inline void solve() {
-  int n, m;
-  cin >> n >> m;
-  multiset<long long> tickets;
-  for (int i = 0; i < n; i++) {
-    long long h;
-    cin >> h;
-    tickets.insert(h);
-  }
+  int N;
+  cin >> N;
+  vi x(N);
+  read(x);
+  set<int> s;
+  rep(i, 0, N - 1) s.insert(x[i]);
+  cout << s.size() << endl;
 
-  for (int i = 0; i < m; i++) {
-    long long t;
-    cin >> t;
-
-    auto it = tickets.upper_bound(t);
-    if (it == tickets.begin()) {
-      cout << -1 << "\n";
-    } else {
-      --it;
-      cout << *it << "\n";
-      tickets.erase(it);
-    }
-  }
+  // or use
+  // sort(all(x));
+  // cout << unique(all(x)) - x.begin();
 }
 
 // =================== MAIN ===================

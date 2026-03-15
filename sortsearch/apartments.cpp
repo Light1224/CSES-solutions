@@ -135,16 +135,31 @@ template <typename T> void print(const vector<T> &a) {
 // =================== SOLVE FUNCTION ===================
 
 inline void solve() {
-  int N;
-  cin >> N;
-  vi a(N);
+  int N, M;
+  ll K;
+  cin >> N >> M >> K;
+  vll a(N), b(M);
   read(a);
+  read(b);
 
-  set<int> s;
-  for (int x : a)
-    s.insert(x);
+  sort(all(a));
+  sort(all(b));
 
-  cout << s.size() << endl;
+  int i = 0, j = 0;
+  int ans = 0;
+
+  while (i < N && j < M) {
+    if (abs(a[i] - b[j]) <= K) {
+      ans++;
+      i++;
+      j++;
+    } else if (a[i] < b[j] - K) {
+      i++;
+    } else
+      j++;
+  }
+
+  cout << ans << endl;
 }
 
 // =================== MAIN ===================

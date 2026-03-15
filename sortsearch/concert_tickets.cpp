@@ -135,24 +135,28 @@ template <typename T> void print(const vector<T> &a) {
 // =================== SOLVE FUNCTION ===================
 
 inline void solve() {
-  int N;
-  cin >> N;
-  vector<pii> m(N);
+  int N, M;
+  cin >> N >> M;
 
-  rep(i, 0, N - 1) cin >> m[i].first >> m[i].second;
-
-  sort(m.begin(), m.end(),
-       [](auto &a, auto &b) { return a.second < b.second; });
-
-  int last = 0, ans = 0;
-  for (auto [s, e] : m) {
-    if (s >= last) {
-      ans++;
-      last = e;
-    }
+  multiset<int> t;
+  rep(i, 0, N - 1) {
+    int x;
+    cin >> x;
+    t.insert(x);
   }
 
-  cout << ans << endl;
+  rep(i, 0, M - 1) {
+    int T;
+    cin >> T;
+    auto it = t.upper_bound(T);
+    if (it == t.begin())
+      cout << -1 << endl;
+    else {
+      --it;
+      cout << *it << endl;
+      t.erase(it);
+    }
+  }
 }
 
 // =================== MAIN ===================
