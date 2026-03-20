@@ -1,6 +1,6 @@
 
 - all solutions in C++ 
-- see solve function to see the solution for each problem 
+- see solve function for see the solution to each problem 
 - use the markdown files in review folder for brief explanation of solutions 
 
 Order of Solving 
