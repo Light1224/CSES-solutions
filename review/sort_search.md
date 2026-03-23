@@ -103,6 +103,66 @@
 - time - O(NlogN) 
 
 
+# Traffic Lights 
+
+- maintain set of all traffic light positions (sorted automatically) 
+- store multiset of lengths of segments between consecutive lights 
+- when inserting, find which segment the new light breaks and update new segment lengths 
+- *it2 ---- p and p ---- *it1, when p is inserted 
+- time - O(NlogN) 
+
+# Distinct Value Subarray
+
+- use a set to check for uniqueness in each subarray and sliding window to go through subarrays 
+- have two pointers l and r, at each step, if a_r not in the subarray, insert it to the set, if it is, keep removing leftmost elements till the subarray has only distincy elements again, and do this for r from 0 to N-1
+- keep adding the subarray length, to count the number of distinct subarrays --> ans += r - l + 1 
+- time - O(NlogN)
+
+# Distinct Value Subsequence
+
+- turn this into a simple combinatorics problem 
+- build a frequency map of each element in the array
+- ans = product of each frequency+1 (+1 to count exclusion) - 1 (subtract 1 from product to not count empty subsequence, where all elements were excluded) 
+
+# Josephus Problem I 
+
+- use a queue to simulate a circle 
+- skip a person by, pushing the front of the queue, to the back, and popping it, then print the new front element and pop it to delete it 
+- time - O(N)
+
+# Josephus Problem II 
+
+- use fenwick tree for speed
+- modifying solution to above problem leads to TLE 
+- build a fenwick Tree 
+- update marks if an element is removed or to be counted 
+- findk returns the kth person to be counted
+- then iterate through the circle to count and print all elements
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
