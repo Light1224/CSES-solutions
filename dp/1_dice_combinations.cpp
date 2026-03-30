@@ -135,31 +135,18 @@ template <typename T> void print(const vector<T> &a) {
 // =================== SOLVE FUNCTION ===================
 
 inline void solve() {
+  int N;
+  cin >> N;
 
-  int n;
-  long long x;
-  cin >> n >> x;
-  vector<pair<long long, int>> a(n);
-  for (int i = 0; i < n; i++) {
-    cin >> a[i].first;
-    a[i].second = i + 1; // store original position
+  vll dp(N + 1, 0);
+
+  dp[0] = 1;
+  rep(i, 1, N) rep(j, 1, 6) {
+    if (i - j >= 0)
+      dp[i] = (dp[i] + dp[i - j]) % MOD;
   }
 
-  sort(a.begin(), a.end());
-
-  int l = 0, r = n - 1;
-  while (l < r) {
-    long long sum = a[l].first + a[r].first;
-    if (sum == x) {
-      cout << a[l].second << " " << a[r].second << "\n";
-      return;
-    } else if (sum < x)
-      l++;
-    else
-      r--;
-  }
-
-  cout << "IMPOSSIBLE\n";
+  cout << dp[N] % MOD << endl;
 }
 
 // =================== MAIN ===================

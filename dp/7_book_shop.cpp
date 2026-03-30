@@ -6,6 +6,7 @@
 #include <bitset>
 #include <cassert>
 #include <chrono>
+#include <climits>
 #include <cmath>
 #include <cstring>
 #include <iomanip>
@@ -135,24 +136,22 @@ template <typename T> void print(const vector<T> &a) {
 // =================== SOLVE FUNCTION ===================
 
 inline void solve() {
-  int N;
-  cin >> N;
-  vector<pii> m(N);
+  int N, x;
+  cin >> N >> x;
+  vi h(N), s(N);
+  read(h);
+  read(s);
 
-  rep(i, 0, N - 1) cin >> m[i].first >> m[i].second;
-
-  sort(m.begin(), m.end(),
-       [](auto &a, auto &b) { return a.second < b.second; });
-
-  int last = 0, ans = 0;
-  for (auto [s, e] : m) {
-    if (s >= last) {
-      ans++;
-      last = e;
+  vll dp(x + 1, 0);
+  rep(i, 0, N - 1) {
+    per(j, x, 1) {
+      if (h[i] > j)
+        continue;
+      dp[j] = max(dp[j], s[i] + dp[j - h[i]]);
     }
   }
 
-  cout << ans << endl;
+  cout << dp[x] << endl;
 }
 
 // =================== MAIN ===================
