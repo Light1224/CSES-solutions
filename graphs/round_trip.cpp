@@ -192,10 +192,6 @@ inline void solve() {
     cout << cycle.size() << endl;
     for(int x : cycle) cout << x << " ";
     cout << endl;
-
-
-
-
 }
 
 // =================== MAIN ===================

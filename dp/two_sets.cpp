@@ -26,11 +26,11 @@ using namespace std;
 
 // =================== CONSTANTS & TYPES ===================
 using ld = long double;
-using ll = long long;
-const ll INF = 1LL << 60;
+const int INF = 1e9;
 const ld EPS = 1e-9;
 const int MOD = 1e9 + 7;
 
+using ll = long long;
 using ull = unsigned long long;
 using pii = pair<int, int>;
 using pll = pair<long long, long long>;
@@ -134,68 +134,28 @@ template <typename T> void print(const vector<T> &a) {
 
 // =================== SOLVE FUNCTION ===================
 
-struct edge{
-    int u, v;
-    ll w;
-};
-
-
 inline void solve() {
-    int n, m;
-    cin >> n >> m;
-    vector<edge> e;
-    vvi rev(n+1);
+    int n;
+    cin >> n;
 
-    rep(i, 0, m-1){
-        int u, v;
-        ll w;
-        cin >> u >> v >> w;
-        e.pb({u,v,-w});
-        rev[v].pb(u);
+    ll tot = 1LL * n * (n+1)/2;
+    if(tot % 2){
+        cout << 0 << endl;
+        return;
     }
 
-    vb canreach(n+1, false);
-    queue<int> q;
-    q.push(n);
-    canreach[n] = true;
+    int need = tot/2;
+    vll dp(need+1, 0);
+    dp[0] = 1;
 
-    while(!q.empty()){
-        int u = q.front();
-        q.pop();
-
-        for(int v : rev[u]){
-            if(!canreach[v]){
-                canreach[v] = true;
-                q.push(v);
-            }
-        }
+    rep(x, 1, n) per(j, need, x){
+        dp[j] += dp[j-x];
+        dp[j] %= MOD;
     }
+    ll inv2 = (MOD+1)/2;
+    ll ans = dp[need] * inv2 % MOD;
+    cout << ans << endl;
 
-    vll dist(n+1, INF);
-    dist[1] = 0;
-
-    rep(i, 1, n){
-        bool flag = false;
-
-        for(auto &x : e){
-            if(dist[x.u] == INF) continue;
-            if(dist[x.v] > dist[x.u] + x.w){
-                dist[x.v] = dist[x.u] + x.w;
-                flag = true;
-            }
-        }
-        if(!flag) break;
-    }
-
-    for(auto &x: e){
-        if(dist[x.u] == INF) continue;
-        if(dist[x.v] > dist[x.u] + x.w && canreach[x.v]){
-            cout << -1 << endl;
-            return;
-        }
-    }
-
-    cout << -dist[n] << endl;
 }
 
 // =================== MAIN ===================

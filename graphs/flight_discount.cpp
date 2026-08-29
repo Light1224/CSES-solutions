@@ -170,8 +170,6 @@ inline void solve() {
     }
 
     cout << dist[n][1] << endl;
-
-
 }
 
 // =================== MAIN ===================

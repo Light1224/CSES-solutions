@@ -166,9 +166,6 @@ inline void solve() {
        if(d[a][b] == INF) cout << -1 << endl;
        else cout << d[a][b] << endl;
    }
-
-
-
 }
 
 // =================== MAIN ===================

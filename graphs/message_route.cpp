@@ -136,7 +136,6 @@ template <typename T> void print(const vector<T> &a) {
 
 vvi adj;
 vi vis;
-
 inline void solve() {
    int n, m;
    cin >> n >> m;
@@ -187,8 +186,6 @@ inline void solve() {
 
    for(auto x : path) cout << x << " ";
    cout << endl;
-
-
 }
 
 // =================== MAIN ===================

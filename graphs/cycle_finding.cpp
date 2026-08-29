@@ -134,27 +134,30 @@ template <typename T> void print(const vector<T> &a) {
 
 // =================== SOLVE FUNCTION ===================
 
+struct edge{
+    int u, v;
+    ll w;
+};
+
 inline void solve() {
     int n, m;
     cin >> n >> m;
-    vector<tuple<int, int, ll>> e;
+    vector<edge> e(m);
 
-    rep(i, 0, m-1){
-        int u,v;
-        ll w;
+    for(auto &[u,v,w] : e){
         cin >> u >> v >> w;
-        e.pb({u,v,w});
+        --u;
+        --v;
     }
 
-    vll d(n+1, 0);
-    vi par(n+1, -1);
-
+    vll d(n, 0);
+    vi par(n, -1);
     int x = -1;
 
-    rep(i, 1, n){
+    rep(i, 0, n-1){
         x = -1;
-        for(auto [u,v,w] : e){
-            if(d[v] + w < d[v]){
+        for(auto &[u,v,w] : e){
+            if(d[v] > d[u] + w){
                 d[v] = d[u] + w;
                 par[v] = u;
                 x = v;
@@ -167,10 +170,9 @@ inline void solve() {
         return;
     }
 
+    rep(i, 0, n-1) x = par[x];
+
     vi cycle;
-    rep(i, 0, n-1){
-        x = par[x];
-    }
     int cur = x;
 
     do{
@@ -178,10 +180,11 @@ inline void solve() {
         cur = par[cur];
     }while(cur != x);
 
+    reverse(all(cycle));
     cout << "YES" << endl;
-    for(int v : cycle) cout << v << " " ;
+    for(int v : cycle) cout << v + 1 << ' ';
+    cout << cycle.front() + 1 << ' ';
     cout << endl;
-
 }
 
 // =================== MAIN ===================

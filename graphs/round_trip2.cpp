@@ -26,11 +26,11 @@ using namespace std;
 
 // =================== CONSTANTS & TYPES ===================
 using ld = long double;
-using ll = long long;
-const ll INF = 1LL << 60;
+const int INF = 1e9;
 const ld EPS = 1e-9;
 const int MOD = 1e9 + 7;
 
+using ll = long long;
 using ull = unsigned long long;
 using pii = pair<int, int>;
 using pll = pair<long long, long long>;
@@ -134,68 +134,53 @@ template <typename T> void print(const vector<T> &a) {
 
 // =================== SOLVE FUNCTION ===================
 
-struct edge{
-    int u, v;
-    ll w;
-};
+vvi adj;
+vi state,par,cycle;
 
+bool dfs(int x){
+    state[x] = 1;
+    for(int v : adj[x]){
+        if(state[v] == 0){
+            par[v] = x;
+            if(dfs(v)) return true;
+        }else if(state[v] == 1){
+            cycle.pb(v);
+            int cur = x;
+            while(cur != v){
+                cycle.pb(cur);
+                cur = par[cur];
+            }
+            cycle.pb(v);
+            reverse(all(cycle));
+            return true;
+        }
+    }
+    state[x] = 2;
+    return false;
+}
 
 inline void solve() {
-    int n, m;
-    cin >> n >> m;
-    vector<edge> e;
-    vvi rev(n+1);
+    int n,m;
+    cin >> n>> m;
+    adj.assign(n, {});
+    state.assign(n, 0);
+    par.assign(n, -1);
 
     rep(i, 0, m-1){
         int u, v;
-        ll w;
-        cin >> u >> v >> w;
-        e.pb({u,v,-w});
-        rev[v].pb(u);
+        cin >> u >> v;
+        u--; v--;
+        adj[u].pb(v);
     }
 
-    vb canreach(n+1, false);
-    queue<int> q;
-    q.push(n);
-    canreach[n] = true;
-
-    while(!q.empty()){
-        int u = q.front();
-        q.pop();
-
-        for(int v : rev[u]){
-            if(!canreach[v]){
-                canreach[v] = true;
-                q.push(v);
-            }
-        }
+    rep(i, 0, n-1) if(state[i] == 0 && dfs(i)) break;
+    if(cycle.empty()){
+        cout << "IMPOSSIBLE" << endl;
+        return;
     }
-
-    vll dist(n+1, INF);
-    dist[1] = 0;
-
-    rep(i, 1, n){
-        bool flag = false;
-
-        for(auto &x : e){
-            if(dist[x.u] == INF) continue;
-            if(dist[x.v] > dist[x.u] + x.w){
-                dist[x.v] = dist[x.u] + x.w;
-                flag = true;
-            }
-        }
-        if(!flag) break;
-    }
-
-    for(auto &x: e){
-        if(dist[x.u] == INF) continue;
-        if(dist[x.v] > dist[x.u] + x.w && canreach[x.v]){
-            cout << -1 << endl;
-            return;
-        }
-    }
-
-    cout << -dist[n] << endl;
+    cout << cycle.size() << endl;
+    for(int v : cycle) cout << v + 1 << ' ';
+    cout << endl;
 }
 
 // =================== MAIN ===================

@@ -26,11 +26,11 @@ using namespace std;
 
 // =================== CONSTANTS & TYPES ===================
 using ld = long double;
-using ll = long long;
-const ll INF = 1LL << 60;
+const int INF = 1e9;
 const ld EPS = 1e-9;
 const int MOD = 1e9 + 7;
 
+using ll = long long;
 using ull = unsigned long long;
 using pii = pair<int, int>;
 using pll = pair<long long, long long>;
@@ -134,68 +134,36 @@ template <typename T> void print(const vector<T> &a) {
 
 // =================== SOLVE FUNCTION ===================
 
-struct edge{
-    int u, v;
-    ll w;
-};
-
-
 inline void solve() {
-    int n, m;
-    cin >> n >> m;
-    vector<edge> e;
-    vvi rev(n+1);
+    int n,m,k;
+    cin >> n >> m >> k;
+    vector<vector<pii>> adj(n);
 
     rep(i, 0, m-1){
-        int u, v;
-        ll w;
+        int u, v, w;
         cin >> u >> v >> w;
-        e.pb({u,v,-w});
-        rev[v].pb(u);
+        u--; v--;
+        adj[u].pb({v,w});
     }
 
-    vb canreach(n+1, false);
-    queue<int> q;
-    q.push(n);
-    canreach[n] = true;
-
-    while(!q.empty()){
-        int u = q.front();
-        q.pop();
-
-        for(int v : rev[u]){
-            if(!canreach[v]){
-                canreach[v] = true;
-                q.push(v);
-            }
+    priority_queue<pll, vector<pll>, greater<pll>> pq;
+    vi cnt(n, 0);
+    pq.push({0,0});
+    int found = 0;
+    while(!pq.empty() && found < k){
+        auto [d,u] = pq.top();
+        pq.pop();
+        if(cnt[u] == k) continue;
+        cnt[u]++;
+        if(u == n-1){
+            cout << d << ' ';
+            found++;
+        }
+        for(auto &[v,w] : adj[u]){
+            if(cnt[v] < k) pq.push({d+w, v});
         }
     }
-
-    vll dist(n+1, INF);
-    dist[1] = 0;
-
-    rep(i, 1, n){
-        bool flag = false;
-
-        for(auto &x : e){
-            if(dist[x.u] == INF) continue;
-            if(dist[x.v] > dist[x.u] + x.w){
-                dist[x.v] = dist[x.u] + x.w;
-                flag = true;
-            }
-        }
-        if(!flag) break;
-    }
-
-    for(auto &x: e){
-        if(dist[x.u] == INF) continue;
-        if(dist[x.v] > dist[x.u] + x.w && canreach[x.v]){
-            cout << -1 << endl;
-            return;
-        }
-    }
-
-    cout << -dist[n] << endl;
+    cout << endl;
 }
 
 // =================== MAIN ===================

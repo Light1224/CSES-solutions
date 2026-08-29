@@ -175,8 +175,6 @@ inline void solve() {
     }
 
     rep(i, 1, n) cout << color[i] + 1 << " ";
-
-
     cout << endl;
 
 }
